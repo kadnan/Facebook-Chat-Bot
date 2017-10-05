@@ -1,12 +1,9 @@
 <?php
 /**
  * Webhook for Time Bot- Facebook Messenger Bot
- * User: adnan
- * Date: 24/04/16
- * Time: 3:26 PM
  */
-$access_token = "EAAH5qCyWCdcBAP0ddTZBNbVRdmqd43TZCnBJGFEwRZAmO76hlrXfWmVzBXO5xEsochEnlrQ88Tkrwm2B63KzXctLxXQ8RU6KKM9sWEFsGZAaBzmmMUoqVjfir1n5ufXgW8btvZAL41bNJ5S0IceHKUCioOLTqCLZCZCOOMlNz5fRAZDZD";
-$verify_token = "fb_time_bot";
+
+include 'config.php';
 $hub_verify_token = null;
 
 if(isset($_REQUEST['hub_challenge'])) {
@@ -29,16 +26,23 @@ $message_to_reply = '';
 /**
  * Some Basic rules to validate incoming messages
  */
-if(preg_match('[time|current time|now]', strtolower($message))) {
+if(preg_match('[time|current time|now|время|час]', strtolower($message))) {
 
-    // Make request to Time API
-    ini_set('user_agent','Mozilla/4.0 (compatible; MSIE 6.0)');
-    $result = file_get_contents("http://www.timeapi.org/utc/now?format=%25a%20%25b%20%25d%20%25I:%25M:%25S%20%25Y");
-    if($result != '') {
-        $message_to_reply = $result;
+    $time = getdate();
+    $hours = $time['hours'];
+    if ($time['minutes']<10) {
+        $minutes = "0".$time['minutes'];
+    } else {
+        $minutes = $time['minutes'];
+    }
+    $response = $hours.":".$minutes;
+    if($response != '') {
+        $message_to_reply = $response;
+    } else {
+        $message_to_reply = "Sorry, I don't know.";
     }
 } else {
-    $message_to_reply = 'Huh! what do you mean?';
+    $message_to_reply = 'Sorry, I don\'t understand you. I can only tell what time it is now.';
 }
 
 //API Url

@@ -1,0 +1,8 @@
+<?php
+// Your Page Access Token
+$access_token = "XXXXXXXXXXXXXXXXXXXX";
+
+// Your webhook varification token
+$verify_token = "fb_time_bot";
+
+?>
